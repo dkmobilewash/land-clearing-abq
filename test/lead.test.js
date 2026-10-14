@@ -22,7 +22,8 @@ function mockFetch(status = 200, reply = { id: 'email_123' }) {
 const lead = { first_name: 'Jane', last_name: 'Doe', phone: '505-555-0000', email: 'jane@example.com', address: '87109', project_type: 'Land/lot clearing', property_size: '1–5 acres', property_type: 'Vacant lot', timeframe: 'ASAP', weed_notice: 'Yes', message: 'Lots of <tumbleweeds>' };
 const post = (body, accept = 'application/json') => ({ method: 'POST', headers: { accept }, body, query: {} });
 const run = async (req) => { const res = mockRes(); await handler(req, res); return res; };
-const withEnv = (env) => { for (const k of Object.keys(ENV)) delete process.env[k]; Object.assign(process.env, env); };
+const ALL_KEYS = ['RESEND_API_KEY', 'RESEND_API', 'LEAD_TO_EMAIL', 'SEND_EMAIL', 'LEAD_FROM_EMAIL'];
+const withEnv = (env) => { for (const k of ALL_KEYS) delete process.env[k]; Object.assign(process.env, env); };
 console.error = () => {}; // keep expected error logs quiet
 
 const tests = {
@@ -52,12 +53,23 @@ const tests = {
     }
     assert.strictEqual(calls.length, 0);
   },
-  'missing env vars → 500, no send': async () => {
-    for (const k of Object.keys(ENV)) {
+  'missing API key or recipient → 500, no send': async () => {
+    for (const k of ['RESEND_API_KEY', 'LEAD_TO_EMAIL']) {
       withEnv({ ...ENV, [k]: '' }); mockFetch();
       const res = await run(post({ ...lead }));
       assert.strictEqual(res.statusCode, 500, k); assert.strictEqual(calls.length, 0);
     }
+  },
+  'RESEND_API + SEND_EMAIL names work, test sender used without LEAD_FROM_EMAIL': async () => {
+    withEnv({ RESEND_API: 're_alias', SEND_EMAIL: 'me@example.com' }); mockFetch();
+    const res = await run(post({ ...lead }));
+    assert.deepStrictEqual([res.statusCode, res.body], [200, { ok: true }]);
+    assert.strictEqual(calls[0].opts.headers.Authorization, 'Bearer re_alias');
+    assert.deepStrictEqual(calls[0].body.to, ['me@example.com']);
+    assert.strictEqual(calls[0].body.from, 'Land Clearing Albuquerque <onboarding@resend.dev>');
+    const chk = await run({ method: 'GET', headers: {}, query: { check: '', send: 'me@example.com' } });
+    assert.deepStrictEqual([chk.body.apiKey, chk.body.sendTo, chk.body.customSender, chk.body.testEmail.sent], [true, true, false, true]);
+    assert.match(chk.body.note, /only delivers to the email address your Resend account/);
   },
   'Resend error → 502': async () => {
     withEnv(ENV); mockFetch(403, { message: 'domain not verified' });
@@ -88,12 +100,12 @@ const tests = {
     withEnv(ENV); mockFetch();
     const res = await run({ method: 'GET', headers: {}, query: { check: '' } });
     assert.strictEqual(res.statusCode, 200);
-    assert.deepStrictEqual([res.body.RESEND_API_KEY, res.body.LEAD_TO_EMAIL, res.body.LEAD_FROM_EMAIL, res.body.senderDomain], [true, true, true, 'landclearingalbuquerque.com']);
+    assert.deepStrictEqual([res.body.apiKey, res.body.sendTo, res.body.customSender, res.body.senderDomain], [true, true, true, 'landclearingalbuquerque.com']);
     assert.ok(!JSON.stringify(res.body).includes('re_test') && !JSON.stringify(res.body).includes('owner@'));
     assert.strictEqual(calls.length, 0);
     withEnv({});
     const empty = await run({ method: 'GET', headers: {}, query: { check: '' } });
-    assert.deepStrictEqual([empty.body.RESEND_API_KEY, empty.body.LEAD_TO_EMAIL, empty.body.LEAD_FROM_EMAIL, empty.body.senderDomain], [false, false, false, null]);
+    assert.deepStrictEqual([empty.body.apiKey, empty.body.sendTo, empty.body.customSender, empty.body.senderDomain], [false, false, false, 'resend.dev']);
   },
   '?check&send only sends to a LEAD_TO_EMAIL address': async () => {
     withEnv(ENV); mockFetch();

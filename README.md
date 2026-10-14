@@ -67,11 +67,15 @@ No dependencies.
 2. Form submissions go to the serverless function `api/lead.js`, which emails each lead through [Resend](https://resend.com).
    In **Project → Settings → Environment Variables**, add these for **Production**:
 
-   | Variable | Example |
+   | Variable (either name works) | Example |
    |---|---|
-   | `RESEND_API_KEY` | `re_xxxxxxxx` (from Resend → API Keys) |
-   | `LEAD_TO_EMAIL` | `you@yourbusiness.com` (comma-separate for several) |
-   | `LEAD_FROM_EMAIL` | `Website <leads@landclearingalbuquerque.com>` (the domain must be verified in Resend) |
+   | `RESEND_API_KEY` or `RESEND_API` | `re_xxxxxxxx` (from Resend → API Keys) |
+   | `LEAD_TO_EMAIL` or `SEND_EMAIL` | `you@yourbusiness.com` (comma-separate for several) |
+   | `LEAD_FROM_EMAIL` (optional) | `Website <leads@landclearingalbuquerque.com>` (the domain must be verified in Resend) |
+
+   Without `LEAD_FROM_EMAIL`, leads are sent from Resend's test sender (`onboarding@resend.dev`), which
+   **only delivers to the email address your Resend account was created with**. Verify your domain in Resend and
+   set `LEAD_FROM_EMAIL` to send leads to any address.
 
 3. Redeploy after adding the variables. Until they're set, the form shows a "please call us" error instead of silently losing leads.
 4. In Resend → Domains, verify your sending domain. At your DNS host, also add a DMARC record so Gmail doesn't spam-folder the leads:
@@ -79,6 +83,6 @@ No dependencies.
 5. Check the setup:
    - `https://yourdomain.com/api/lead?check` shows `true`/`false` for each variable (never the values) and the sender domain.
    - `https://yourdomain.com/api/lead?check&send=you@yourbusiness.com` sends one test email and shows Resend's reply.
-     It only sends to an address listed in `LEAD_TO_EMAIL`.
+     It only sends to an address listed in `LEAD_TO_EMAIL` / `SEND_EMAIL`.
 
 Spam protection: a hidden `company` honeypot field. When a bot fills it in, the API reports success and sends nothing.
