@@ -1,0 +1,47 @@
+{
+  "_note": "Business details used across the whole site. Anything marked PLACEHOLDER below must be replaced with real info before launch, then run `npm run build`.",
+  "_placeholders": "phone, phoneHref, email, domain, hours, license, insurance, yearFounded, equipment, googleReviewUrl, price.* are all PLACEHOLDERS.",
+
+  "name": "Land Clearing Albuquerque",
+  "shortName": "Land Clearing ABQ",
+  "tagline": "Land clearing, excavation and grading in Albuquerque, NM",
+
+  "phone": "(505) 555-0123",
+  "phoneHref": "+15055550123",
+  "email": "hello@landclearingalbuquerque.com",
+  "domain": "https://www.landclearingalbuquerque.com",
+
+  "address": "4401 Masthead St NE",
+  "city": "Albuquerque",
+  "state": "NM",
+  "zip": "87109",
+
+  "hours": "[Business hours — PLACEHOLDER]",
+  "license": "NM License #000000",
+  "insurance": "[Insurance details — PLACEHOLDER]",
+  "yearFounded": "[Year founded — PLACEHOLDER]",
+  "equipment": "[Equipment list — PLACEHOLDER]",
+  "googleReviewUrl": "#",
+
+  "price": {
+    "clearHaul": "$X,XXX",
+    "clearGrade": "$X,XXX",
+    "fullSitePrep": "$X,XXX"
+  },
+
+  "areas": [
+    "Albuquerque",
+    "Los Ranchos de Albuquerque",
+    "Tijeras",
+    "Cedar Crest",
+    "Sandia Park",
+    "Rio Rancho",
+    "Corrales",
+    "Bernalillo",
+    "Placitas",
+    "Los Lunas",
+    "Belen",
+    "Bosque Farms",
+    "Edgewood"
+  ]
+}
