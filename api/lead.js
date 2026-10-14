@@ -1,9 +1,12 @@
 // Vercel serverless function: receives the free-estimate / contact form and emails the lead.
 //
-// Required environment variables (Vercel → Project → Settings → Environment Variables):
-//   RESEND_API_KEY   API key from https://resend.com
-//   LEAD_TO_EMAIL    where leads are sent (comma-separate multiple addresses)
-//   LEAD_FROM_EMAIL  verified sender, e.g. "Website <leads@yourdomain.com>"
+// Environment variables (Vercel → Project → Settings → Environment Variables).
+// Either name in each row works:
+//   RESEND_API_KEY or RESEND_API   API key from https://resend.com
+//   LEAD_TO_EMAIL  or SEND_EMAIL   where leads are sent (comma-separate multiple addresses)
+//   LEAD_FROM_EMAIL (optional)     sender on a domain verified in Resend, e.g. "Website <leads@yourdomain.com>".
+//                                  Without it, Resend's test sender is used, which only delivers to the
+//                                  email address your Resend account was created with.
 
 const FIELDS = [
   ['first_name', 'First name'],
@@ -22,6 +25,18 @@ const FIELDS = [
 const escapeHtml = (s) =>
   String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
+const TEST_SENDER = 'Land Clearing Albuquerque <onboarding@resend.dev>';
+
+function settings() {
+  const env = process.env;
+  return {
+    apiKey: env.RESEND_API_KEY || env.RESEND_API || '',
+    to: (env.LEAD_TO_EMAIL || env.SEND_EMAIL || '').split(',').map((s) => s.trim()).filter(Boolean),
+    from: env.LEAD_FROM_EMAIL || TEST_SENDER,
+    customFrom: Boolean(env.LEAD_FROM_EMAIL),
+  };
+}
+
 function parseBody(req) {
   const body = req.body;
   if (!body) return {};
@@ -36,20 +51,20 @@ module.exports = async (req, res) => {
   // GET /api/lead?check&send=<your LEAD_TO_EMAIL address> also sends a test email and returns
   // Resend's reply. Requiring the destination address keeps strangers from triggering it.
   if (req.method === 'GET' && req.query && 'check' in req.query) {
-    const from = process.env.LEAD_FROM_EMAIL || '';
+    const { apiKey, from, customFrom } = settings();
     const fromDomain = (from.match(/@([^>\s]+)/) || [])[1] || null;
-    const to = (process.env.LEAD_TO_EMAIL || '').split(',').map((s) => s.trim().toLowerCase()).filter(Boolean);
+    const to = settings().to.map((s) => s.toLowerCase());
     const send = String(req.query.send || '').trim().toLowerCase();
 
     let testEmail;
     if (send) {
       if (!to.includes(send)) {
-        testEmail = { sent: false, reason: 'send= must match the address in LEAD_TO_EMAIL.' };
+        testEmail = { sent: false, reason: 'send= must match the address in LEAD_TO_EMAIL / SEND_EMAIL.' };
       } else {
         try {
           const r = await fetch('https://api.resend.com/emails', {
             method: 'POST',
-            headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+            headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
             body: JSON.stringify({ from, to: [send], subject: 'Test from your website form', text: 'If you can read this, website leads will reach you.' }),
           });
           testEmail = { sent: r.ok, resendStatus: r.status, resendReply: await r.json().catch(() => null) };
@@ -61,15 +76,15 @@ module.exports = async (req, res) => {
 
     return res.status(200).json({
       ...(testEmail && { testEmail }),
-      RESEND_API_KEY: Boolean(process.env.RESEND_API_KEY),
-      LEAD_TO_EMAIL: Boolean(process.env.LEAD_TO_EMAIL),
-      LEAD_FROM_EMAIL: Boolean(from),
+      apiKey: Boolean(apiKey),
+      sendTo: to.length > 0,
+      customSender: customFrom,
       senderDomain: fromDomain,
       note: fromDomain === 'resend.dev'
         ? 'Test sender: Resend only delivers to the email address your Resend account was created with.'
         : fromDomain
           ? `The domain ${fromDomain} must show "Verified" in Resend → Domains.`
-          : 'LEAD_FROM_EMAIL is missing or has no @domain.',
+          : 'LEAD_FROM_EMAIL has no @domain.',
     });
   }
 
@@ -91,9 +106,9 @@ module.exports = async (req, res) => {
 
   if (!clean('first_name') || !clean('phone')) return fail(400, 'Name and phone are required.');
 
-  const { RESEND_API_KEY, LEAD_TO_EMAIL, LEAD_FROM_EMAIL } = process.env;
-  if (!RESEND_API_KEY || !LEAD_TO_EMAIL || !LEAD_FROM_EMAIL) {
-    console.error('Lead form: missing RESEND_API_KEY, LEAD_TO_EMAIL or LEAD_FROM_EMAIL');
+  const { apiKey, to, from } = settings();
+  if (!apiKey || !to.length) {
+    console.error('Lead form: missing RESEND_API_KEY/RESEND_API or LEAD_TO_EMAIL/SEND_EMAIL');
     return fail(500, 'Form is not configured yet.');
   }
 
@@ -109,10 +124,10 @@ module.exports = async (req, res) => {
   try {
     const r = await fetch('https://api.resend.com/emails', {
       method: 'POST',
-      headers: { Authorization: `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from: LEAD_FROM_EMAIL,
-        to: LEAD_TO_EMAIL.split(',').map((s) => s.trim()).filter(Boolean),
+        from,
+        to,
         reply_to: clean('email') || undefined,
         subject: `New lead: ${formName} — ${name}${clean('project_type') ? ` (${clean('project_type')})` : ''}${clean('weed_notice') === 'Yes' ? ' — HAS WEED NOTICE' : ''}`,
         html: `<h2>${escapeHtml(formName)}</h2><table>${rows}</table>${page ? `<p style="color:#888">Submitted from ${escapeHtml(page)}</p>` : ''}`,
