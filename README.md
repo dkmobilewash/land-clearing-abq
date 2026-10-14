@@ -27,7 +27,10 @@ It uses the same architecture as the Soft Water Albuquerque site: a zero-depende
   - `crumb:` (and optional `parent: Services=/services/`) for the visible breadcrumbs and BreadcrumbList schema
   - `schema: service` (Service schema) or `schema: faq` (FAQPage schema, built from the page's own `<details>` questions)
   - `noindex: true` to keep a page out of search engines and the sitemap
-- **Styles:** `assets/css/styles.css`. Colors are CSS variables at the top.
+- **Styles:** `assets/css/styles.css`. Colors and the type scale are CSS variables at the top.
+  The palette is named after local materials: basalt (dark), caliche (light sections), juniper (accents),
+  survey tan (contour lines) and safety yellow (buttons only). Type is Barlow Condensed for headlines and Barlow for text.
+  `assets/img/topo.svg` is the contour-map texture used in the hero and page headers.
 - **Images:** `assets/img/`. Hand-made SVGs (logo, favicon, equipment illustrations, icons).
 
 The build fails if any `{{token}}` or `<!-- @partial -->` is left unresolved, so typos are caught before deploy.
