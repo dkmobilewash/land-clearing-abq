@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect width="400" height="300" rx="18" fill="#fbf3e4"/><path d="M0 200V150l40-12 50 14 60-46 28 16 52-36 40 22 34-12 50 40 46-16v80z" fill="#7d8f69" opacity=".3"/><path d="M0 214l70-14 60 10 80-18 70 12 120-14v110H0z" fill="#e8d4b0"/><rect y="240" width="400" height="60" fill="#d9bd8f"/><path d="M0 240h400" stroke="#b99a6b" stroke-width="2"/>
+<path d="M90 252l46-56h150l46 56z" fill="#efdcb9" stroke="#b99a6b" stroke-width="2"/>
+<g stroke="#b99a6b" stroke-width="2" stroke-dasharray="6 6" opacity=".8"><path d="M126 232h170M110 246h200M142 214h140"/></g>
+<g stroke="#6b4a2e" stroke-width="4" stroke-linecap="round"><path d="M136 196v-30M286 196v-30M90 252v-34M332 252v-34"/></g>
+<g fill="#a4522c"><path d="M136 166l16 5-16 5z"/><path d="M286 166l16 5-16 5z"/><path d="M90 218l16 5-16 5z"/><path d="M332 218l16 5-16 5z"/></g>
+<path d="M136 172L286 172M90 224L332 224" stroke="#a4522c" stroke-width="1.5" opacity=".7"/>
+<path d="M40 280h60m-14-8l14 8-14 8" fill="none" stroke="#4f6136" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M300 280h60m-14-8l14 8-14 8" fill="none" stroke="#4f6136" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="166" y="120" width="88" height="34" rx="6" fill="#1d1f21"/><text x="210" y="142" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#f2b705" text-anchor="middle">PAD READY</text><path d="M210 154v42" stroke="#1d1f21" stroke-width="4"/></svg>

@@ -1,0 +1,69 @@
+<form class="lead-form" name="free-estimate" method="POST" action="/api/lead">
+  <input type="hidden" name="form_name" value="Free on-site estimate">
+  <p class="visually-hidden" aria-hidden="true"><label>Leave blank: <input name="company" tabindex="-1" autocomplete="off"></label></p>
+  <h3 class="lead-form__title">Get your free on-site estimate</h3>
+  <p class="lead-form__sub">We walk the property and give you a written quote.</p>
+  <div class="form-row">
+    <label>First name<input type="text" name="first_name" autocomplete="given-name" required></label>
+    <label>Last name<input type="text" name="last_name" autocomplete="family-name" required></label>
+  </div>
+  <div class="form-row">
+    <label>Phone<input type="tel" name="phone" autocomplete="tel" required></label>
+    <label>Email<input type="email" name="email" autocomplete="email"></label>
+  </div>
+  <label>Property address or ZIP<input type="text" name="address" autocomplete="street-address" required></label>
+  <label>Project type
+    <select name="project_type">
+      <option>Land/lot clearing</option>
+      <option>Brush &amp; weed removal</option>
+      <option>Tree &amp; stump removal</option>
+      <option>Excavation</option>
+      <option>Grading &amp; leveling</option>
+      <option>Site prep</option>
+      <option>Trenching</option>
+      <option>Driveway</option>
+      <option>Demolition</option>
+      <option>Other</option>
+    </select>
+  </label>
+  <div class="form-row">
+    <label>Property size
+      <select name="property_size">
+        <option>Under 1/4 acre</option>
+        <option>1/4–1 acre</option>
+        <option>1–5 acres</option>
+        <option>5+ acres</option>
+        <option selected>Not sure</option>
+      </select>
+    </label>
+    <label>Property type
+      <select name="property_type">
+        <option>Residential</option>
+        <option>Commercial</option>
+        <option>Vacant lot</option>
+        <option>Ranch or acreage</option>
+      </select>
+    </label>
+  </div>
+  <label>Timeframe
+    <select name="timeframe">
+      <option>ASAP</option>
+      <option>Within a month</option>
+      <option>1–3 months</option>
+      <option>Just planning</option>
+    </select>
+  </label>
+  <fieldset>
+    <legend>Did you receive a weed or litter notice from the city or county?</legend>
+    <div class="radio-row">
+      <label><input type="radio" name="weed_notice" value="Yes"> Yes</label>
+      <label><input type="radio" name="weed_notice" value="No"> No</label>
+    </div>
+  </fieldset>
+  <label><span>Tell us about the project <span class="optional">(optional)</span></span>
+    <textarea name="message" rows="3" placeholder="Overgrown lot, stumps to remove, pad for a new garage, drainage problem..."></textarea>
+  </label>
+  <button class="btn btn--primary btn--block btn--lg" type="submit">Request My Free Estimate</button>
+  <p class="lead-form__error" role="alert" hidden>Sorry, something went wrong sending your request. Please call us at <a href="tel:{{phoneHref}}">{{phone}}</a>.</p>
+  <p class="lead-form__fine">No obligation. We'll never share your info.</p>
+</form>
