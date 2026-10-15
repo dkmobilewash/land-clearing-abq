@@ -40,7 +40,6 @@ Search the repo for `PLACEHOLDER` to find them all.
 
 | What | Where |
 |---|---|
-| Phone (`phone`, `phoneHref`) | `site.config.json` (currently `(505) 555-0123`) |
 | Email, domain, hours | `site.config.json` |
 | NM contractor license, insurance details, year founded, equipment list | `site.config.json` |
 | **"Starting at" prices** (`price.clearHaul`, `price.clearGrade`, `price.fullSitePrep`) | `site.config.json` (currently `$X,XXX`) |

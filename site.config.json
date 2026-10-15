@@ -1,13 +1,13 @@
 {
   "_note": "Business details used across the whole site. Anything marked PLACEHOLDER below must be replaced with real info before launch, then run `npm run build`.",
-  "_placeholders": "phone, phoneHref, email, domain, hours, license, insurance, yearFounded, equipment, googleReviewUrl, price.* are all PLACEHOLDERS.",
+  "_placeholders": "email, domain, hours, license, insurance, yearFounded, equipment, googleReviewUrl, price.* are all PLACEHOLDERS.",
 
   "name": "Land Clearing Albuquerque",
   "shortName": "Land Clearing ABQ",
   "tagline": "Land clearing, excavation and grading in Albuquerque, NM",
 
-  "phone": "(505) 555-0123",
-  "phoneHref": "+15055550123",
+  "phone": "(505) 578-0369",
+  "phoneHref": "+15055780369",
   "email": "hello@landclearingalbuquerque.com",
   "domain": "https://www.landclearingalbuquerque.com",
 
