@@ -42,7 +42,7 @@ Search the repo for `PLACEHOLDER` to find them all.
 
 | What | Where |
 |---|---|
-| Email, domain, hours | `site.config.json` |
+| Email, hours | `site.config.json` |
 | NM contractor license, insurance details, year founded, equipment list | `site.config.json` |
 | **"Starting at" prices** (`price.clearHaul`, `price.clearGrade`, `price.fullSitePrep`) | `site.config.json` (currently `$X,XXX`) |
 | Google review link (`googleReviewUrl`) | `site.config.json` |
@@ -82,8 +82,8 @@ No dependencies.
 4. In Resend → Domains, verify your sending domain. At your DNS host, also add a DMARC record so Gmail doesn't spam-folder the leads:
    `TXT` record, name `_dmarc`, value `v=DMARC1; p=none;`
 5. Check the setup:
-   - `https://yourdomain.com/api/lead?check` shows `true`/`false` for each variable (never the values) and the sender domain.
-   - `https://yourdomain.com/api/lead?check&send=you@yourbusiness.com` sends one test email and shows Resend's reply.
+   - `https://www.landclearingalbuquerque.com/api/lead?check` shows `true`/`false` for each variable (never the values) and the sender domain.
+   - `https://www.landclearingalbuquerque.com/api/lead?check&send=you@yourbusiness.com` sends one test email and shows Resend's reply.
      It only sends to an address listed in `LEAD_TO_EMAIL` / `SEND_EMAIL`.
 
 Spam protection: a hidden `company` honeypot field. When a bot fills it in, the API reports success and sends nothing.
