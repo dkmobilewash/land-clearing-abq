@@ -48,9 +48,10 @@ const jsonLd = (obj) =>
 // title: ...
 // description: ...
 // crumb: Land & Lot Clearing          (breadcrumb label; adds BreadcrumbList schema)
-// parent: Services=/services/         (optional middle breadcrumb)
+// parent: Services=/services/         (optional middle breadcrumbs; chain several with " > ")
 // schema: service, faq                (optional extra schema; comma-separate several)
 // area: Rio Rancho                    (service pages for one area: sets areaServed)
+// servicename: Land & Lot Clearing     (service + area pages: names the Service schema)
 // noindex: true                       (keeps the page out of search + the sitemap)
 // -->
 function parsePage(raw) {
@@ -96,6 +97,15 @@ const business = {
   areaServed: config.areas.map((name) => ({ '@type': 'City', name: `${name}, ${config.state}` })),
 };
 
+// "Services=/services/ > Land & Lot Clearing=/land-clearing/" → [[name, href], ...]
+function parents(meta) {
+  if (!meta.parent) return [];
+  return meta.parent.split(' > ').map((part) => {
+    const i = part.lastIndexOf('=');
+    return [part.slice(0, i).trim(), part.slice(i + 1).trim()];
+  });
+}
+
 function schemaFor(meta, body, url, vars) {
   const blocks = [business];
   const types = (meta.schema || '').split(',').map((t) => t.trim()).filter(Boolean);
@@ -103,10 +113,7 @@ function schemaFor(meta, body, url, vars) {
 
   if (crumb) {
     const items = [{ name: 'Home', url: `${base}/` }];
-    if (meta.parent) {
-      const [name, href] = meta.parent.split('=');
-      items.push({ name: name.trim(), url: base + href.trim() });
-    }
+    for (const [name, href] of parents(meta)) items.push({ name, url: base + href });
     items.push({ name: crumb, url: base + url });
     blocks.push({
       '@context': 'https://schema.org',
@@ -119,8 +126,9 @@ function schemaFor(meta, body, url, vars) {
     blocks.push({
       '@context': 'https://schema.org',
       '@type': 'Service',
-      name: meta.area ? `Land clearing & excavation in ${meta.area}` : crumb,
-      serviceType: meta.area ? 'Land clearing, grading and excavation' : crumb,
+      name: meta.servicename && meta.area ? `${meta.servicename} in ${meta.area}`
+        : meta.area ? `Land clearing & excavation in ${meta.area}` : crumb,
+      serviceType: meta.servicename || (meta.area ? 'Land clearing, grading and excavation' : crumb),
       description: fill(meta.description, vars),
       url: base + url,
       provider: { '@id': `${base}/#business` },
@@ -150,10 +158,7 @@ function schemaFor(meta, body, url, vars) {
 function breadcrumbsHtml(meta, vars) {
   if (!meta.crumb) return '';
   let html = '<nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li>';
-  if (meta.parent) {
-    const [name, href] = meta.parent.split('=');
-    html += `<li><a href="${href.trim()}">${escapeHtml(name.trim())}</a></li>`;
-  }
+  for (const [name, href] of parents(meta)) html += `<li><a href="${href}">${escapeHtml(name)}</a></li>`;
   return html + `<li aria-current="page">${escapeHtml(fill(meta.crumb, vars))}</li></ol></nav>`;
 }
 
@@ -165,7 +170,16 @@ const pagesDir = path.join(SRC, 'pages');
 const urls = [];
 const leftovers = [];
 
-for (const file of fs.readdirSync(pagesDir).filter((f) => f.endsWith('.html')).sort()) {
+// Pages can be nested one folder deep: src/pages/land-clearing/albuquerque.html → /land-clearing/albuquerque/
+const pageFiles = [];
+for (const entry of fs.readdirSync(pagesDir, { withFileTypes: true })) {
+  if (entry.isDirectory()) {
+    for (const f of fs.readdirSync(path.join(pagesDir, entry.name)).filter((f) => f.endsWith('.html')))
+      pageFiles.push(`${entry.name}/${f}`);
+  } else if (entry.name.endsWith('.html')) pageFiles.push(entry.name);
+}
+
+for (const file of pageFiles.sort()) {
   const slug = file.replace(/\.html$/, '');
   const url = slug === 'index' ? '/' : `/${slug}/`;
   const { meta, body } = parsePage(fs.readFileSync(path.join(pagesDir, file), 'utf8'));

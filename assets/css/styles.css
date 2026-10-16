@@ -432,3 +432,36 @@ p { margin: 0 0 1em; }
   .compare th, .compare td { padding: .7rem .55rem; font-size: .95rem; }
   .faq details p { padding-right: 0; }
 }
+
+/* ---------- Service + area pages ---------- */
+.section--tight { padding: 3rem 0; }
+.page-hero__plain { max-width: 46rem; }
+.prose-block h2 { margin-bottom: .75rem; }
+.prose-block p { color: var(--muted); }
+.block-intro { color: var(--muted); font-size: 1.08rem; margin-bottom: 1.25rem; }
+.aside-list { background: #fff; border: 1px solid var(--line); border-top: 4px solid var(--juniper); padding: 1.4rem 1.6rem; }
+.aside-list h3 { margin-bottom: .75rem; }
+.aside-list .checklist { margin: 0; }
+.steps--4 { grid-template-columns: repeat(4, 1fr); }
+.scenarios { display: grid; grid-template-columns: 1fr 1fr; gap: 0 3rem; border-top: 2px solid var(--basalt); }
+.scenario { padding: 1.4rem 0; border-bottom: 1px solid var(--line); }
+.scenario h3 { margin-bottom: .35rem; }
+.scenario p { color: var(--muted); margin: 0; }
+.factors { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 2.5rem; margin: 0; }
+.factors > div { padding: 1.2rem 0; border-top: 3px solid var(--basalt); }
+.factors dt { font-family: var(--font-display); font-size: 1.3rem; font-weight: 600; color: var(--basalt); margin-bottom: .3rem; }
+.factors dd { margin: 0; color: var(--muted); }
+.compare--text td, .compare--text th { text-align: left; vertical-align: top; }
+.compare--text td:nth-child(2) { background: transparent; }
+.compare--text thead th:nth-child(2) { background: transparent; }
+.note-box--callout { border-left-color: var(--yellow); }
+.link-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+.link-groups .h3 { margin-bottom: .9rem; }
+.link-buttons { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .6rem; }
+.link-buttons a { display: block; padding: .55rem 1rem; border: 1px solid var(--basalt); border-radius: var(--radius); color: var(--basalt); background: #fff; text-decoration: none; font-weight: 600; font-size: .98rem; }
+.link-buttons a:hover { background: var(--basalt); color: #fff; }
+.link-buttons--lg a { padding: .8rem 1.3rem; font-size: 1.05rem; }
+@media (max-width: 960px) {
+  .steps--4 { grid-template-columns: 1fr; }
+  .scenarios, .factors, .link-groups { grid-template-columns: 1fr; }
+}
