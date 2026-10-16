@@ -49,7 +49,8 @@ const jsonLd = (obj) =>
 // description: ...
 // crumb: Land & Lot Clearing          (breadcrumb label; adds BreadcrumbList schema)
 // parent: Services=/services/         (optional middle breadcrumb)
-// schema: service | faq               (optional extra schema)
+// schema: service, faq                (optional extra schema; comma-separate several)
+// area: Rio Rancho                    (service pages for one area: sets areaServed)
 // noindex: true                       (keeps the page out of search + the sitemap)
 // -->
 function parsePage(raw) {
@@ -97,6 +98,7 @@ const business = {
 
 function schemaFor(meta, body, url, vars) {
   const blocks = [business];
+  const types = (meta.schema || '').split(',').map((t) => t.trim()).filter(Boolean);
   const crumb = meta.crumb && fill(meta.crumb, vars);
 
   if (crumb) {
@@ -113,22 +115,24 @@ function schemaFor(meta, body, url, vars) {
     });
   }
 
-  if (meta.schema === 'service') {
+  if (types.includes('service')) {
     blocks.push({
       '@context': 'https://schema.org',
       '@type': 'Service',
-      name: crumb,
-      serviceType: crumb,
+      name: meta.area ? `Land clearing & excavation in ${meta.area}` : crumb,
+      serviceType: meta.area ? 'Land clearing, grading and excavation' : crumb,
       description: fill(meta.description, vars),
       url: base + url,
       provider: { '@id': `${base}/#business` },
-      areaServed: business.areaServed,
+      areaServed: meta.area
+        ? { '@type': 'Place', name: `${meta.area}, ${config.state}` }
+        : business.areaServed,
     });
   }
 
   // FAQPage schema is built from the page's own <details><summary>Q</summary><p>A</p></details>
   // markup, so the schema can never drift from what visitors see.
-  if (meta.schema === 'faq') {
+  if (types.includes('faq')) {
     const qa = [...body.matchAll(/<details>\s*<summary>([\s\S]*?)<\/summary>([\s\S]*?)<\/details>/g)];
     blocks.push({
       '@context': 'https://schema.org',
