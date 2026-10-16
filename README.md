@@ -11,6 +11,7 @@ It uses the same architecture as the Soft Water Albuquerque site: a zero-depende
 | `/services/` | Services hub, links to every service page |
 | `/land-clearing/`, `/brush-weed-removal/`, `/tree-stump-removal/`, `/forestry-mulching/`, `/defensible-space/`, `/demolition-debris-hauling/` | Clearing service pages |
 | `/excavation/`, `/grading-leveling/`, `/site-prep/`, `/trenching/`, `/driveway-grading/`, `/drainage-erosion-control/`, `/rock-caliche-removal/` | Excavation & grading service pages |
+| `/<service>/<area>/`, e.g. `/land-clearing/albuquerque/` | 85 service + area pages in `src/pages/<service>/<area>.html`, one for each service in each featured area where the service fits (weak fits were left out on purpose). Each has its own copy, section mix and FAQ. They're linked from the "Where we offer…" section on every service page and the "Services we offer in…" section on every area page (`src/partials/where-<service>.html` and `src/partials/services-in-<area>.html`). |
 | `/packages/` | 3 bundles + comparison table |
 | `/free-estimate/` | Estimate booking form |
 | `/service-areas/` | Bernalillo, Sandoval, Valencia & Torrance Counties (anchors like `#rio-rancho` are linked from the home page) |
@@ -23,7 +24,7 @@ It uses the same architecture as the Soft Water Albuquerque site: a zero-depende
 - **Business info, placeholders & prices:** `site.config.json`. Change the phone number there once and it updates everywhere.
 - **Shared pieces:** `src/partials/`. Any partial can be pulled into a page with `<!-- @file-name -->`
   (`estimate-form`, `packages`, `services-grid`, `review-cards`, `cta`, plus `<!-- @breadcrumbs -->`).
-- **Page content:** `src/pages/*.html`. The comment at the top of each page sets:
+- **Page content:** `src/pages/*.html` and `src/pages/<service>/<area>.html` (one folder level of nesting becomes `/<service>/<area>/`). The comment at the top of each page sets:
   - `title:` and `description:` for the `<title>` and meta description
   - `crumb:` (and optional `parent: Services=/services/`) for the visible breadcrumbs and BreadcrumbList schema
   - `schema: service`, `schema: faq` or `schema: service, faq` (Service schema; FAQPage schema built from the page's own `<details>` questions)
