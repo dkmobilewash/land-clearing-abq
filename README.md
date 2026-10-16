@@ -14,6 +14,7 @@ It uses the same architecture as the Soft Water Albuquerque site: a zero-depende
 | `/packages/` | 3 bundles + comparison table |
 | `/free-estimate/` | Estimate booking form |
 | `/service-areas/` | Bernalillo, Sandoval, Valencia & Torrance Counties (anchors like `#rio-rancho` are linked from the home page) |
+| `/albuquerque/`, `/rio-rancho/`, `/corrales/`, `/north-valley/`, `/tanoan/`, `/paradise-hills/`, `/los-ranchos-de-albuquerque/`, `/albuquerque-acres/` | One page per featured service area: local ground conditions, who sets the rules, most-requested services, local FAQ (with FAQPage schema) and an estimate form. Listed in this order in the Service Areas dropdown and the footer. |
 | `/projects/` | Before/after gallery (placeholder cards) |
 | `/reviews/`, `/about/`, `/faq/`, `/contact/` | |
 | `/thank-you/` | Shown after a form is sent (`noindex`, left out of the sitemap) |
@@ -25,7 +26,8 @@ It uses the same architecture as the Soft Water Albuquerque site: a zero-depende
 - **Page content:** `src/pages/*.html`. The comment at the top of each page sets:
   - `title:` and `description:` for the `<title>` and meta description
   - `crumb:` (and optional `parent: Services=/services/`) for the visible breadcrumbs and BreadcrumbList schema
-  - `schema: service` (Service schema) or `schema: faq` (FAQPage schema, built from the page's own `<details>` questions)
+  - `schema: service`, `schema: faq` or `schema: service, faq` (Service schema; FAQPage schema built from the page's own `<details>` questions)
+  - `area: Rio Rancho` on area pages, which sets the Service schema's `areaServed`
   - `noindex: true` to keep a page out of search engines and the sitemap
 - **Styles:** `assets/css/styles.css`. Colors and the type scale are CSS variables at the top.
   The palette is named after local materials: basalt (dark), caliche (light sections), juniper (accents),
