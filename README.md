@@ -52,11 +52,10 @@ Search the repo for `PLACEHOLDER` to find them all.
 | What | Where |
 |---|---|
 | Email, hours | `site.config.json` |
-| NM contractor license, insurance details, year founded, equipment list | `site.config.json` |
+| Insurance details, year founded, equipment list | `site.config.json` (`license` is kept there but not shown on the site right now) |
 | **"Starting at" prices** (`price.clearHaul`, `price.clearGrade`, `price.fullSitePrep`) | `site.config.json` (currently `$X,XXX`) |
 | Google review link (`googleReviewUrl`) | `site.config.json` |
 | Customer reviews | `src/partials/review-cards.html` |
-| Owner story | `src/pages/about.html` |
 | Before/after project photos | `src/pages/projects.html` (put photos in `assets/img/projects/`) |
 | Logo | `assets/img/logo.svg` and `assets/img/favicon.svg` |
 | "Licensed & insured" claims | Trust strip and comparison table in `src/pages/index.html`; remove them if not yet true |
