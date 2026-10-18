@@ -100,6 +100,11 @@ const business = {
     geo: { '@type': 'GeoCoordinates', latitude: config.geo.latitude, longitude: config.geo.longitude },
     hasMap: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${config.address}, ${config.city}, ${config.state} ${config.zip}`)}`,
   }),
+  ...(config.openingHours && {
+    openingHoursSpecification: config.openingHours.map((h) => ({
+      '@type': 'OpeningHoursSpecification', dayOfWeek: h.days, opens: h.opens, closes: h.closes,
+    })),
+  }),
   areaServed: config.areas.map((name) => ({ '@type': 'City', name: `${name}, ${config.state}` })),
 };
 
