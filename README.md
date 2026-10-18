@@ -52,7 +52,7 @@ Search the repo for `PLACEHOLDER` to find them all.
 | What | Where |
 |---|---|
 | Email, hours | `site.config.json` |
-| Insurance details, year founded, equipment list | `site.config.json` (`license` is kept there but not shown on the site right now) |
+| Year founded | `site.config.json` (`license`, `insurance` and `equipment` are kept there but not shown on the site right now) |
 | **"Starting at" prices** (`price.clearHaul`, `price.clearGrade`, `price.fullSitePrep`) | `site.config.json` (currently `$X,XXX`) |
 | Google review link (`googleReviewUrl`) | `site.config.json` |
 | Customer reviews | `src/partials/review-cards.html` |
