@@ -1,24 +1,21 @@
 <!--
 title: Customer Reviews | {{name}}
-description: Reviews from Albuquerque-area property owners who hired {{name}} for land clearing, grading, excavation and site prep.
+description: Customer reviews for {{name}}, a land clearing, grading and excavation company in Albuquerque, NM.
 crumb: Reviews
+noindex: true
 -->
+<!-- Hidden for now (noindex, not linked). When you have real reviews, add them here, remove noindex,
+     and add the Reviews link back to src/partials/header.html and footer.html. -->
 <section class="page-hero page-hero--center">
   <div class="container">
     <!-- @breadcrumbs -->
-    <h1>Reviews from our neighbors</h1>
-    <p class="page-hero__lead">We earn our reputation one clean job site at a time.</p>
-    <!-- PLACEHOLDER: add a real rating summary (e.g. from Google) only once you have real reviews -->
+    <h1>Customer reviews</h1>
+    <p class="page-hero__lead">Reviews will be posted here. Until then, call us with any question about how we work, or see the questions we suggest asking any contractor before you hire.</p>
+    <div class="hero__actions hero__actions--center">
+      <a class="btn btn--primary btn--lg" href="tel:{{phoneHref}}">Call {{phone}}</a>
+      <a class="btn btn--ghost btn--lg" href="/projects/">Projects we take on</a>
+    </div>
   </div>
-</section>
-
-<section class="section">
-  <div class="container grid grid--3">
-    <!-- @review-cards -->
-    <!-- @review-cards -->
-  </div>
-  <!-- PLACEHOLDER: set googleReviewUrl in site.config.json to your Google review link -->
-  <p class="center"><a class="btn btn--outline" href="{{googleReviewUrl}}">Leave us a Google review</a></p>
 </section>
 
 <!-- @cta -->

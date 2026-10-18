@@ -7,7 +7,7 @@ It uses the same architecture as the Soft Water Albuquerque site: a zero-depende
 ## Pages
 | URL | Source |
 |---|---|
-| `/` | `src/pages/index.html`: hero + estimate form, trust strip, problem cards, 3 bundles, comparison table, 3 steps, local know-how, services, reviews, service areas, FAQ |
+| `/` | `src/pages/index.html`: hero + estimate form, trust strip, problem cards, services, comparison table, 3 steps, local know-how, questions to ask before hiring, service areas, FAQ |
 | `/services/` | Services hub, links to every service page |
 | `/land-clearing/`, `/brush-weed-removal/`, `/tree-stump-removal/`, `/forestry-mulching/`, `/defensible-space/`, `/demolition-debris-hauling/` | Clearing service pages |
 | `/excavation/`, `/grading-leveling/`, `/site-prep/`, `/trenching/`, `/driveway-grading/`, `/drainage-erosion-control/`, `/rock-caliche-removal/` | Excavation & grading service pages |
@@ -16,14 +16,15 @@ It uses the same architecture as the Soft Water Albuquerque site: a zero-depende
 | `/free-estimate/` | Estimate booking form |
 | `/service-areas/` | Bernalillo, Sandoval, Valencia & Torrance Counties (anchors like `#rio-rancho` are linked from the home page) |
 | `/albuquerque/`, `/rio-rancho/`, `/corrales/`, `/north-valley/`, `/tanoan/`, `/paradise-hills/`, `/los-ranchos-de-albuquerque/`, `/albuquerque-acres/` | One page per featured service area: local ground conditions, who sets the rules, most-requested services, local FAQ (with FAQPage schema) and an estimate form. Listed in this order in the Service Areas dropdown and the footer. |
-| `/projects/` | Before/after gallery (placeholder cards) |
-| `/reviews/`, `/about/`, `/faq/`, `/contact/` | |
+| `/projects/` | Projects we take on: six common job types with where they start, what the work involves and the result, plus what changes the size of a job. Add real before/after photos here when you have them. |
+| `/reviews/` | Hidden for now (`noindex`, not linked). Add real reviews, then remove `noindex` and add the nav/footer links back. |
+| `/about/`, `/faq/`, `/contact/` | |
 | `/thank-you/` | Shown after a form is sent (`noindex`, left out of the sitemap) |
 
 ## Editing
 - **Business info, placeholders & prices:** `site.config.json`. Change the phone number there once and it updates everywhere.
 - **Shared pieces:** `src/partials/`. Any partial can be pulled into a page with `<!-- @file-name -->`
-  (`estimate-form`, `packages`, `services-grid`, `review-cards`, `cta`, plus `<!-- @breadcrumbs -->`).
+  (`estimate-form`, `packages`, `services-grid`, `cta`, plus `<!-- @breadcrumbs -->`).
 - **Page content:** `src/pages/*.html` and `src/pages/<service>/<area>.html` (one folder level of nesting becomes `/<service>/<area>/`). The comment at the top of each page sets:
   - `title:` and `description:` for the `<title>` and meta description
   - `crumb:` (and optional `parent: Services=/services/`) for the visible breadcrumbs and BreadcrumbList schema
@@ -55,8 +56,8 @@ Search the repo for `PLACEHOLDER` to find them all.
 | Year founded | `site.config.json` (`license`, `insurance` and `equipment` are kept there but not shown on the site right now) |
 | **"Starting at" prices** (`price.clearHaul`, `price.clearGrade`, `price.fullSitePrep`) | Hidden for now: the home bundles section and the Pricing nav/footer links were removed, `/packages/` is `noindex` and shows no prices. To bring them back, set real prices in `site.config.json` and see the comment at the top of `src/partials/packages.html`. |
 | Google review link (`googleReviewUrl`) | `site.config.json` |
-| Customer reviews | `src/partials/review-cards.html` |
-| Before/after project photos | `src/pages/projects.html` (put photos in `assets/img/projects/`) |
+| Customer reviews | `src/pages/reviews.html` (hidden until real reviews are added) |
+| Before/after project photos (optional) | `src/pages/projects.html` (put photos in `assets/img/projects/`) |
 | Logo | `assets/img/logo.svg` and `assets/img/favicon.svg` |
 | "Licensed & insured" claims | Trust strip and comparison table in `src/pages/index.html`; remove them if not yet true |
 
