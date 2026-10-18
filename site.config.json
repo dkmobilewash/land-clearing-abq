@@ -1,6 +1,6 @@
 {
   "_note": "Business details used across the whole site. Anything marked PLACEHOLDER below must be replaced with real info before launch, then run `npm run build`.",
-  "_placeholders": "email, hours, license, insurance, yearFounded, equipment, googleReviewUrl, price.* are all PLACEHOLDERS.",
+  "_placeholders": "email, license, insurance, yearFounded, equipment, googleReviewUrl, price.* are all PLACEHOLDERS.",
 
   "name": "Land Clearing Albuquerque",
   "shortName": "Land Clearing ABQ",
@@ -17,7 +17,11 @@
   "zip": "87109",
   "geo": { "latitude": 35.1665, "longitude": -106.5958 },
 
-  "hours": "[Business hours — PLACEHOLDER]",
+  "hours": "Mon–Fri 9 AM–6 PM, Sat 9 AM–2 PM, Sun closed",
+  "openingHours": [
+    { "days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "opens": "09:00", "closes": "18:00" },
+    { "days": ["Saturday"], "opens": "09:00", "closes": "14:00" }
+  ],
   "license": "NM License #000000",
   "insurance": "[Insurance details — PLACEHOLDER]",
   "yearFounded": "[Year founded — PLACEHOLDER]",
