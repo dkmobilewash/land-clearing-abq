@@ -2,6 +2,7 @@
 // Reads src/pages/*.html, wraps each in src/partials/layout.html, fills {{tokens}}
 // from site.config.json, and writes clean URLs to dist/ (e.g. dist/about/index.html).
 const fs = require('fs');
+const { execFileSync } = require('child_process');
 const path = require('path');
 
 const ROOT = __dirname;
@@ -83,7 +84,8 @@ const business = {
   name: config.name,
   description: config.tagline,
   url: `${base}/`,
-  logo: `${base}/assets/img/logo.svg`,
+  logo: `${base}/assets/img/logo-512.png`,
+  image: `${base}/assets/img/og-image.png`,
   telephone: config.phone,
   email: config.email,
   address: {
@@ -94,8 +96,30 @@ const business = {
     postalCode: config.zip,
     addressCountry: 'US',
   },
+  ...(config.geo && {
+    geo: { '@type': 'GeoCoordinates', latitude: config.geo.latitude, longitude: config.geo.longitude },
+    hasMap: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${config.address}, ${config.city}, ${config.state} ${config.zip}`)}`,
+  }),
   areaServed: config.areas.map((name) => ({ '@type': 'City', name: `${name}, ${config.state}` })),
 };
+
+// Google shows roughly 60 characters of a title. If "Page title | Brand" runs longer, drop the brand.
+const TITLE_MAX = 60;
+const brandSuffix = ` | ${config.name}`;
+function pageTitle(meta, vars) {
+  const t = fill(meta.title || config.name, vars);
+  return t.length > TITLE_MAX && t.endsWith(brandSuffix) ? t.slice(0, -brandSuffix.length) : t;
+}
+
+// Last change date of a page's source file, from git (for <lastmod>). Missing git history → no date.
+function lastModified(file) {
+  try {
+    const out = execFileSync('git', ['log', '-1', '--format=%cs', '--', path.join('src/pages', file)], { cwd: ROOT, stdio: ['ignore', 'pipe', 'ignore'] });
+    return String(out).trim() || null;
+  } catch {
+    return null;
+  }
+}
 
 // "Services=/services/ > Land & Lot Clearing=/land-clearing/" → [[name, href], ...]
 function parents(meta) {
@@ -202,7 +226,7 @@ for (const file of pageFiles.sort()) {
 
   html = fill(html, {
     ...vars,
-    pageTitle: escapeHtml(fill(meta.title || config.name, vars)),
+    pageTitle: escapeHtml(pageTitle(meta, vars)),
     pageDescription: escapeHtml(fill(meta.description || config.tagline, vars)),
     canonical: base + url,
   });
@@ -210,18 +234,38 @@ for (const file of pageFiles.sort()) {
   const missing = html.match(/\{\{[^}]*\}\}|<!--\s*@[\w-]+\s*-->/g);
   if (missing) leftovers.push(`${file}: ${[...new Set(missing)].join(', ')}`);
 
+  if (slug === '404') {
+    // Vercel serves dist/404.html for any URL that doesn't exist
+    fs.writeFileSync(path.join(DIST, '404.html'), html);
+    continue;
+  }
   const outDir = slug === 'index' ? DIST : path.join(DIST, slug);
   fs.mkdirSync(outDir, { recursive: true });
   fs.writeFileSync(path.join(outDir, 'index.html'), html);
-  if (meta.noindex !== 'true') urls.push(url);
+  if (meta.noindex !== 'true') urls.push({ url, lastmod: lastModified(file) });
 }
 
 // sitemap + robots
 fs.writeFileSync(
   path.join(DIST, 'sitemap.xml'),
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls
-    .map((u) => `  <url><loc>${base}${u}</loc></url>`)
+    .map(({ url, lastmod }) => `  <url><loc>${base}${url}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ''}</url>`)
     .join('\n')}\n</urlset>\n`
+);
+fs.writeFileSync(
+  path.join(DIST, 'site.webmanifest'),
+  JSON.stringify({
+    name: config.name,
+    short_name: config.shortName,
+    start_url: '/',
+    display: 'browser',
+    background_color: '#ffffff',
+    theme_color: '#24211d',
+    icons: [
+      { src: '/assets/img/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { src: '/assets/img/logo-512.png', sizes: '512x512', type: 'image/png' },
+    ],
+  }, null, 2)
 );
 fs.writeFileSync(path.join(DIST, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${base}/sitemap.xml\n`);
 

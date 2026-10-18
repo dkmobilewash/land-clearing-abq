@@ -15,6 +15,7 @@
   "city": "Albuquerque",
   "state": "NM",
   "zip": "87109",
+  "geo": { "latitude": 35.1665, "longitude": -106.5958 },
 
   "hours": "[Business hours — PLACEHOLDER]",
   "license": "NM License #000000",

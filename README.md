@@ -38,6 +38,14 @@ It uses the same architecture as the Soft Water Albuquerque site: a zero-depende
 
 The build fails if any `{{token}}` or `<!-- @partial -->` is left unresolved, so typos are caught before deploy.
 
+SEO details handled by the build:
+- Titles that would run past 60 characters with " | Land Clearing Albuquerque" drop the brand automatically.
+- Every page gets Open Graph and Twitter tags with `assets/img/og-image.png` (1200×630) as the share image.
+- Business schema includes the PNG logo, share image, map coordinates (`geo` in `site.config.json`) and a Google Maps link.
+- `sitemap.xml` includes `<lastmod>` from each page's last git commit; `src/pages/404.html` becomes `dist/404.html`
+  (noindex, not in the sitemap); `site.webmanifest` and PNG icons are generated/included.
+- Fonts (Barlow, Barlow Condensed) are self-hosted in `assets/fonts/` under the SIL Open Font License.
+
 ## Placeholders to replace before launch
 Search the repo for `PLACEHOLDER` to find them all.
 
