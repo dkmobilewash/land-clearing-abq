@@ -1,13 +1,11 @@
-<!-- PLACEHOLDER: "starting at" prices come from site.config.json (price.*) and must be replaced with real prices. -->
+<!-- Prices are hidden for now. To show "starting at" prices again, set price.* in site.config.json and add a
+     <div class="package__price"><span class="price-from">Starting at</span><span class="price-new">[price.* token]</span></div>
+     under each package__sub. -->
 <div class="packages">
   <article class="package">
     <div class="package__img"><img src="/assets/img/dump-truck.svg" alt="Dump truck hauling cleared brush and debris" width="200" height="150"></div>
     <h3 class="package__name">Clear &amp; Haul</h3>
     <p class="package__sub">Get an overgrown lot cleaned up and hauled away</p>
-    <div class="package__price">
-      <span class="price-from">Starting at</span>
-      <span class="price-new">{{price.clearHaul}}</span>
-    </div>
     <ul class="checklist">
       <li>Brush, weed &amp; tumbleweed removal</li>
       <li>Trash, litter &amp; debris pickup</li>
@@ -23,10 +21,6 @@
     <div class="package__img"><img src="/assets/img/skid-steer.svg" alt="Skid steer grading a cleared lot" width="200" height="150"></div>
     <h3 class="package__name">Clear &amp; Grade</h3>
     <p class="package__sub">Clearing plus rough grading for a clean, level lot</p>
-    <div class="package__price">
-      <span class="price-from">Starting at</span>
-      <span class="price-new">{{price.clearGrade}}</span>
-    </div>
     <ul class="checklist">
       <li>Everything in Clear &amp; Haul</li>
       <li>Rough grading &amp; leveling</li>
@@ -41,10 +35,6 @@
     <div class="package__img"><img src="/assets/img/building-pad.svg" alt="Graded lot with a staked building pad" width="200" height="150"></div>
     <h3 class="package__name">Full Site Prep</h3>
     <p class="package__sub">Raw land to a build-ready site</p>
-    <div class="package__price">
-      <span class="price-from">Starting at</span>
-      <span class="price-new">{{price.fullSitePrep}}</span>
-    </div>
     <ul class="checklist">
       <li>Full clearing, trees &amp; stump removal</li>
       <li>Grading &amp; building pad prep</li>

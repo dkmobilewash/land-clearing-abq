@@ -12,7 +12,7 @@ It uses the same architecture as the Soft Water Albuquerque site: a zero-depende
 | `/land-clearing/`, `/brush-weed-removal/`, `/tree-stump-removal/`, `/forestry-mulching/`, `/defensible-space/`, `/demolition-debris-hauling/` | Clearing service pages |
 | `/excavation/`, `/grading-leveling/`, `/site-prep/`, `/trenching/`, `/driveway-grading/`, `/drainage-erosion-control/`, `/rock-caliche-removal/` | Excavation & grading service pages |
 | `/<service>/<area>/`, e.g. `/land-clearing/albuquerque/` | 85 service + area pages in `src/pages/<service>/<area>.html`, one for each service in each featured area where the service fits (weak fits were left out on purpose). Each has its own copy, section mix and FAQ. They're linked from the "Where we offer…" section on every service page and the "Services we offer in…" section on every area page (`src/partials/where-<service>.html` and `src/partials/services-in-<area>.html`). |
-| `/packages/` | 3 bundles + comparison table |
+| `/packages/` | 3 bundles + comparison table (hidden for now: `noindex`, not linked, no prices) |
 | `/free-estimate/` | Estimate booking form |
 | `/service-areas/` | Bernalillo, Sandoval, Valencia & Torrance Counties (anchors like `#rio-rancho` are linked from the home page) |
 | `/albuquerque/`, `/rio-rancho/`, `/corrales/`, `/north-valley/`, `/tanoan/`, `/paradise-hills/`, `/los-ranchos-de-albuquerque/`, `/albuquerque-acres/` | One page per featured service area: local ground conditions, who sets the rules, most-requested services, local FAQ (with FAQPage schema) and an estimate form. Listed in this order in the Service Areas dropdown and the footer. |
@@ -53,7 +53,7 @@ Search the repo for `PLACEHOLDER` to find them all.
 |---|---|
 | Email | `site.config.json` |
 | Year founded | `site.config.json` (`license`, `insurance` and `equipment` are kept there but not shown on the site right now) |
-| **"Starting at" prices** (`price.clearHaul`, `price.clearGrade`, `price.fullSitePrep`) | `site.config.json` (currently `$X,XXX`) |
+| **"Starting at" prices** (`price.clearHaul`, `price.clearGrade`, `price.fullSitePrep`) | Hidden for now: the home bundles section and the Pricing nav/footer links were removed, `/packages/` is `noindex` and shows no prices. To bring them back, set real prices in `site.config.json` and see the comment at the top of `src/partials/packages.html`. |
 | Google review link (`googleReviewUrl`) | `site.config.json` |
 | Customer reviews | `src/partials/review-cards.html` |
 | Before/after project photos | `src/pages/projects.html` (put photos in `assets/img/projects/`) |
